@@ -7,7 +7,7 @@
                  [compojure "1.1.8"]]
   :plugins [[lein-ring "0.8.11"]]
   :ring {:handler yak.handler/app
-         :port 80}
+         :port 3000}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring-mock "0.1.5"]]}})
