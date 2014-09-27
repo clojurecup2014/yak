@@ -9,4 +9,5 @@ goog.addDependency("../reagent/impl/batching.js", ['reagent.impl.batching'], ['r
 goog.addDependency("../reagent/impl/component.js", ['reagent.impl.component'], ['reagent.impl.util', 'reagent.ratom', 'cljs.core', 'reagent.impl.batching', 'reagent.debug']);
 goog.addDependency("../reagent/impl/template.js", ['reagent.impl.template'], ['reagent.impl.util', 'reagent.ratom', 'cljs.core', 'reagent.impl.batching', 'reagent.impl.component', 'reagent.debug', 'clojure.string']);
 goog.addDependency("../reagent/core.js", ['reagent.core'], ['reagent.impl.util', 'reagent.ratom', 'cljs.core', 'reagent.impl.template', 'reagent.impl.batching', 'reagent.impl.component']);
-goog.addDependency("../yak/core.js", ['yak.core'], ['reagent.core', 'cljs.core']);
+goog.addDependency("../yak/boards.js", ['yak.boards'], ['reagent.core', 'cljs.core']);
+goog.addDependency("../yak/core.js", ['yak.core'], ['yak.boards', 'reagent.core', 'cljs.core']);
