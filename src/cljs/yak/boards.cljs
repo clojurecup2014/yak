@@ -3,7 +3,8 @@
     [reagent.core :as reagent :refer [atom]]
     [dommy.utils :as utils]
     [dommy.core :as dommy]
-    [reagent-bootstrap :as b])
+    [reagent-bootstrap :as b]
+    [yak.lists :refer [lists-view]])
   (:use-macros
     [dommy.macros :only [sel1]]))
 
@@ -65,27 +66,27 @@
         {:on-click #(create-board! @new-board)
          :data-dismiss "modal"} "Create"]]])))
 
-(defn show-board []
-  (let [selected (get-selected-board)]
+(defn board-view []
+  (let [board (get-selected-board)]
     [:div
-      [:h3 (:title selected)]
-      [b/panel "Create new list" ""]]))
+      [:h3 (:title board)]
+      [lists-view board]]))
 
-(defn show-no-board []
+(defn no-board-view []
   [:div {:class "jumbotron"}
     [:h1 "No board?!"]
     [:p "It seems that you have not selected a board. Select a board or create a new one."]])
 
-(defn show-introductory []
+(defn introductory-view []
   [:div {:class "jumbotron"}
     [:h1 "No board?!"]
     [:p "You can create a new board from boards menu (when I finish implementing it :D). Now you can just surf this stub-site."]])
 
-(defn show-kanban-board []
+(defn boards-view []
   (cond
-    (= (count @boards) 0) [show-introductory]
-    (nil? (get-selected-board)) [show-no-board]
-    :else [show-board]))
+    (= (count @boards) 0) [introductory-view]
+    (nil? (get-selected-board)) [no-board-view]
+    :else [board-view]))
 
 (defn board-dropdown-item [board]
   [:li {:on-click #(swap-board! (:id board))}
