@@ -16,3 +16,7 @@
 (defn insert-board [board]
   (j/insert! db :BOARD
     board))
+
+(defn list-boards []
+  (j/query db
+    ["SELECT * FROM BOARD"]))

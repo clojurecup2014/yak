@@ -11,6 +11,10 @@
                  [org.clojure/java.jdbc "0.3.5"]
                  [liberator "0.10.0"]
                  [postgresql "9.3-1102.jdbc41"]
+                 [cheshire "5.3.1"]
+
+                 ; Not in clojars
+                 ; https://github.com/steeni/reagent-bootstrap
                  [reagent-bootstrap/reagent-bootstrap "0.1.0-SNAPSHOT"]]
   :plugins [[lein-ring "0.8.11"]
             [lein-cljsbuild "1.0.4-SNAPSHOT"]]
