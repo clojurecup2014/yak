@@ -16,12 +16,6 @@
 (defn get-selected-board []
   (first (filter :selected (map second @boards))))
 
-(defn- create-board! [board]
-  (let [id (swap! boards-counter inc)
-        id-board (assoc board :id id)]
-    (swap! boards assoc id id-board)
-    (swap-board! id))) ; Autoselect new board
-
 (defn- swap-board! [id]
   (let [current (first (filter :selected (map second @boards)))
         selected (first (filter #(= (:id %) id) (map second @boards)))]
@@ -29,6 +23,12 @@
       (swap! boards assoc-in [(:id current) :selected] false))
     (if (not (nil? selected))
       (swap! boards assoc-in [(:id selected) :selected] true))))
+
+(defn- create-board! [board]
+  (let [id (swap! boards-counter inc)
+        id-board (assoc board :id id)]
+    (swap! boards assoc id id-board)
+    (swap-board! id))) ; Autoselect new board
 
 (defn- swap-privacy! [board]
   (let [personal-active (sel1 [".active" :#personal])]
