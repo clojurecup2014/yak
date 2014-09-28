@@ -1,14 +1,7 @@
 (ns yak.cards
   (:require [reagent.core :as reagent :refer [atom]]
             [reagent-bootstrap :as b]
-            [yak.boards :refer [get-selected-board boards]]))
-
-(def cards-counter (atom 0))
-
-(defn add-card [list-id card]
-  (let [board-id (:id (get-selected-board))
-        card-id (swap! cards-counter inc)]
-    (swap! boards assoc-in [board-id :lists list-id :cards card-id] card)))
+            [yak.state :as db]))
 
 (defn edit-card-form [card]
   [:div
@@ -29,20 +22,10 @@
       [edit-card-form new-card] ; Body
       [:div [b/modal-close-button "Close"] ; Footer
        [b/primary-button
-        {:on-click #(add-card list-id @new-card)
+        {:on-click #(db/add-card! list-id @new-card)
          :data-dismiss "modal"} "Create"]]])))
 
 (defn card-as-list-item [card board]
   [b/clickable-list-group-item
     [:span {:on-click #(.log js/console "card clicked")} (:title card)]
       (:description card)])
-
-;(defn cards-view [cards-input]
-;  (let [cards (atom cards-input)]
-;    [b/list-group
-;      (for [card @cards]
-;        [b/clickable-list-group-item
-;          [:span {:on-click #(.log js/console "card clicked")} "A card"]
-;          "Short text ..."])
-;      (b/clickable-list-group-item
-;        [:span {:on-click #(show-create-card-dialog cards)} "Add new card"])]))
