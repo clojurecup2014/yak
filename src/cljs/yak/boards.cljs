@@ -4,7 +4,7 @@
     [dommy.utils :as utils]
     [dommy.core :as dommy]
     [reagent-bootstrap :as b]
-    [yak.lists :refer [lists-view]])
+    [yak.lists :refer [lists-view predefined-lists]])
   (:use-macros
     [dommy.macros :only [sel1]]))
 
@@ -19,15 +19,8 @@
 (defn- create-board! [board]
   (let [id (swap! boards-counter inc)
         id-board (assoc board :id id)]
-    (swap! boards assoc id id-board)))
-
-(defn- swap-privacy! [board]
-  (let [personal-active (sel1 [".active" :#personal])]
-    ; Notice, that we are checking "past" state which will
-    ; change just in a moment, so we swap to the future
-    (if (not (nil? personal-active))
-      (swap! board assoc :privacy :member)
-      (swap! board assoc :privacy :personal))))
+    (swap! boards assoc id id-board)
+    (swap-board! id))) ; Autoselect new board
 
 (defn- swap-board! [id]
   (let [current (first (filter :selected (map second @boards)))
@@ -36,6 +29,14 @@
       (swap! boards assoc-in [(:id current) :selected] false))
     (if (not (nil? selected))
       (swap! boards assoc-in [(:id selected) :selected] true))))
+
+(defn- swap-privacy! [board]
+  (let [personal-active (sel1 [".active" :#personal])]
+    ; Notice, that we are checking "past" state which will
+    ; change just in a moment, so we swap to the future
+    (if (not (nil? personal-active))
+      (swap! board assoc :privacy :member)
+      (swap! board assoc :privacy :personal))))
 
 (defn edit-board-form [board]
   [:div
@@ -56,7 +57,8 @@
   (let [new-board (atom {:title ""
                          :description ""
                          :privacy :personal
-                         :selected false})]
+                         :selected false
+                         :lists (predefined-lists)})]
     (b/open-modal
      [b/modal
       "Create board" ; Title
@@ -75,12 +77,12 @@
 (defn no-board-view []
   [:div {:class "jumbotron"}
     [:h1 "No board?!"]
-    [:p "It seems that you have not selected a board. Select a board or create a new one."]])
+    [:p "It seems that you have not selected a board. Select a board."]])
 
 (defn introductory-view []
   [:div {:class "jumbotron"}
     [:h1 "No board?!"]
-    [:p "You can create a new board from boards menu (when I finish implementing it :D). Now you can just surf this stub-site."]])
+    [:p "You can create a new board from boards menu."]])
 
 (defn boards-view []
   (cond

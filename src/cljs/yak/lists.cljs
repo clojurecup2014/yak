@@ -1,19 +1,28 @@
 (ns yak.lists
   (:require [reagent.core :as reagent :refer [atom]]
-            [reagent-bootstrap :as b]))
+            [reagent-bootstrap :as b]
+            [yak.cards :refer [cards-view]]))
 
-(defn lists-view [board-input]
-  (let [board (atom board-input)])
-  [:div {:class "row"}
-    [:div {:class "col-md-2"}
-      [b/panel "Todo" "Lists goes here" :primary]]
-    [:div {:class "col-md-2"}
-      [b/panel "Doing" "Lists here" :primary]]
-    [:div {:class "col-md-2"}
-      [b/panel "Done" "List here" :primary]]
-    [:div {:class "col-md-2"}
-      [b/panel "Foo 1" "Lists here" :primary]]
-    [:div {:class "col-md-2"}
-      [b/panel "Foo 2" "Lists here" :primary]]
-    [:div {:class "col-md-2"}
-      [b/panel "Foo 3" "Lists here" :primary]]])
+(defn predefined-lists []
+  ; Returns a default set of lists to be used
+  (sorted-map 1 {:name "ToDo" :description "Things that should be done." :cards []},
+              2 {:name "Doing" :description "Things that are in progress." :cards []},
+              3 {:name "Done" :description "Things that are ready." :cards []}))
+
+(defn list-view [list-input]
+  [b/panel (:name list-input) [cards-view list-input] :primary])
+
+(defn select-width [board]
+  (let [length (count (:lists board))]
+    (cond
+      (< length 3) "col-md-6"
+      (< length 4) "col-md-4"
+      (< length 5) "col-md-3"
+      (< length 7) "col-md-2")))
+
+(defn lists-view [board]
+  (let [col-class (select-width board)]
+    [:div {:class "row"}
+      (for [a-list (vals (:lists board))] ; Do not worry about list order for now
+        [:div {:class col-class}
+          [list-view a-list]])]))
