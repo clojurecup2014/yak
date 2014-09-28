@@ -26,7 +26,7 @@
 
 (defn- create-board! [board]
   (let [id (swap! boards-counter inc)
-        id-board (assoc board :id id)]
+        id-board (assoc board :id id)] ; add new id to board object also
     (swap! boards assoc id id-board)
     (swap-board! id))) ; Autoselect new board
 
