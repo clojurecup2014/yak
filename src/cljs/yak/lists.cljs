@@ -14,11 +14,15 @@
         cards (:cards a-list)]
     [b/panel                ; Show a panel as a list container
       (:name a-list)        ; Panel title is list name
-      [b/list-group         ; Show each card in a list with list-group
-        (for [[id card] cards]
-          [card-as-list-item card])
-        (b/clickable-list-group-item ; As a last item, show "Add new card"
-          [:span {:on-click #(show-create-card-dialog list-id)} "Add new card"])]
+      [:div
+        [b/list-group         ; Show each card in a list with list-group
+          (for [[id card] cards]
+            [card-as-list-item card])]
+        [b/primary-button
+          {:on-click #(show-create-card-dialog list-id)
+           :data-dismiss "modal"} "Add new card"]]
+      ;[b/clickable-list-group-item ; As a last item, show "Add new card"
+      ;    [:span {:on-click #(show-create-card-dialog list-id)} "Add new card"]]
       :primary]))
 
 (defn select-width [board]

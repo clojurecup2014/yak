@@ -2,9 +2,13 @@
   (:require [compojure.core :refer :all]
             [compojure.handler :as handler]
             [compojure.route :as route]
-            [ring.util.response :refer [redirect]]))
+            [liberator.core :refer [resource defresource]]
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.util.response :refer [redirect]]
+            [yak.rest :refer [board]]))
 
 (defroutes app-routes
+  (ANY "/rest/board/:board_id" [board_id] (board board_id))
   (GET "/" [] (redirect "/index.html"))
   (route/resources "/")
   (route/not-found "Not Found"))
